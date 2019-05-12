@@ -1,0 +1,5 @@
+libs
+.vs
+Debug
+*/Debug
+*.vcxproj.user

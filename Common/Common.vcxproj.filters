@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Container">
+      <UniqueIdentifier>{48bc819d-bd2b-469b-8350-38d83d807936}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{7afaa376-e037-4f3b-a356-5d0205fd4517}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{f06f26de-ee0f-440c-8fb3-f86b8e4d66e8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Math\Vector.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\MemoryHelper.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\NonCopyable.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Singleton.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Container\Array.hpp">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="Container\SubArray.hpp">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="Container\ArrayDimensions.hpp">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Scalar.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Utils.hpp">
+      <Filter>Math</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Math\Vector.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Utils\Singleton.inl">
+      <Filter>Utils</Filter>
+    </None>
+    <None Include="Container\Array.inl">
+      <Filter>Container</Filter>
+    </None>
+    <None Include="Container\SubArray.inl">
+      <Filter>Container</Filter>
+    </None>
+    <None Include="Math\Scalar.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="Math\Utils.inl">
+      <Filter>Math</Filter>
+    </None>
+  </ItemGroup>
+</Project>
