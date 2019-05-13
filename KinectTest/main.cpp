@@ -94,10 +94,8 @@ void pushVertex3f(const Math::Vector3f& vertex)
 void drawSkeletons()
 {
 	std::vector<Kinect::Skeleton> skeletons = sensor.getSkeletons();
-	for (unsigned int i = 0; i < skeletons.size(); ++i)
+	for (const Kinect::Skeleton& skeleton : skeletons)
 	{
-		Kinect::Skeleton skeleton = skeletons.at(i);
-
 		glBegin(GL_LINES);
 		glLineWidth(5.0f);
 		glColor3f(1.f, 1.f, 1.f);

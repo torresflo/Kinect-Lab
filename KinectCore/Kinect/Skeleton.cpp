@@ -60,12 +60,12 @@ unsigned int Skeleton::getPlayerEnrollmentIndex() const
 	return m_playerEnrollmentIndex;
 }
 
-const Math::Vector3f& Skeleton::getPosition(SkeletonPosition position)
+const Math::Vector3f& Skeleton::getPosition(SkeletonPosition position) const
 {
 	return m_Positions.at(static_cast<unsigned int>(position));
 }
 
-TrackingStatus Skeleton::getTrackingStatus(SkeletonPosition position)
+TrackingStatus Skeleton::getTrackingStatus(SkeletonPosition position) const
 {
 	return m_TrackingStatus.at(static_cast<unsigned int>(position));
 }

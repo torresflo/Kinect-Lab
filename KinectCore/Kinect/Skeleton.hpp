@@ -76,8 +76,8 @@ public:
 
 	unsigned int getPlayerEnrollmentIndex() const;
 
-	const Math::Vector3f& getPosition(SkeletonPosition position);
-	TrackingStatus getTrackingStatus(SkeletonPosition position);
+	const Math::Vector3f& getPosition(SkeletonPosition position) const;
+	TrackingStatus getTrackingStatus(SkeletonPosition position) const;
 
 private:
 	static const unsigned int POSITIONS_COUNT = 20;
