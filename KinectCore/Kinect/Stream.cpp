@@ -138,10 +138,16 @@ Container::Array2D<Math::Scalar32FC3>& DepthStream::getImage()
 	return m_DepthImage;
 }
 
+Container::Array2D<unsigned short>& DepthStream::getPlayersIndex()
+{
+	return m_PlayersIndex;
+}
+
 Error DepthStream::openStreamInternal(INuiSensor * sensor)
 {
 	Container::ArrayDimensions<2> dimensions(getWidth(), getHeight());
 	m_DepthImage.resize(dimensions, Math::Scalar32FC3(0));
+	m_PlayersIndex.resize(dimensions, 0);
 
 	HRESULT result = sensor->NuiImageStreamOpen(NUI_IMAGE_TYPE::NUI_IMAGE_TYPE_DEPTH_AND_PLAYER_INDEX, convertImageResolutionToNui(m_ImageResolution), 0, 2, NULL, &m_Stream);
 	return convertNuiToKinectError(result);
@@ -151,16 +157,19 @@ void DepthStream::updateStreamInternal(INuiSensor * sensor)
 {
 	const unsigned short* start = reinterpret_cast<const unsigned short*>(m_LockedRect.pBits);
 	float* depthImagePointer = reinterpret_cast<float*>(m_DepthImage.getData());
+	unsigned short* playersIndexPointer = m_PlayersIndex.getData();
 
 	unsigned int height = getHeight();
 	unsigned int width = getWidth();
 
 	Vector4 position;
-	for (unsigned int j = 0; j < height; ++j)
+	for (unsigned int y = 0; y < height; ++y)
 	{
-		for (unsigned int i = 0; i < width; ++i)
+		for (unsigned int x = 0; x < width; ++x)
 		{
-			position = NuiTransformDepthImageToSkeleton(i, j, *start);
+			*playersIndexPointer++ = NuiDepthPixelToPlayerIndex(*start);
+
+			position = NuiTransformDepthImageToSkeleton(x, y, *start);
 			*depthImagePointer++ = position.x / position.w;
 			*depthImagePointer++ = position.y / position.w;
 			*depthImagePointer++ = position.z / position.w;
@@ -192,15 +201,11 @@ void ColorStream::updateStreamInternal(INuiSensor * sensor)
 
 	unsigned int height = getHeight();
 	unsigned int width = getWidth();
-	long x = 0, y = 0;
 
-	for (unsigned int j = 0; j < height; ++j)
+	for (unsigned int y = 0; y < height; ++y)
 	{
-		for (unsigned int i = 0; i < width; ++i)
+		for (unsigned int x = 0; x < width; ++x)
 		{
-			x = i;
-			y = j;
-
 			const unsigned char* color = start + (x + width * y) * 4;
 			*colorImagePointer++ = color[2];
 			*colorImagePointer++ = color[1];

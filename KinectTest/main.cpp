@@ -56,6 +56,36 @@ void drawColorImage()
 	glEnd();
 }
 
+void drawPlayerImage()
+{
+	Container::Array2D<Math::Scalar8UC3>& playerImage = sensor.getColorImage();
+	for (unsigned int y = 0; y < height; ++y)
+	{
+		for (unsigned int x = 0; x < width; ++x)
+		{
+			int playerIndex = sensor.getPlayersIndex()[x][y];
+			if (playerIndex < 1 || playerIndex > 6)
+			{
+				playerImage[x][y] = Math::Scalar8UC3(0, 0, 0);
+			}
+		}
+	}
+
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*)playerImage.getData());
+	glBegin(GL_QUADS);
+	glColor3f(1.f, 1.f, 1.f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-1.0f, -0.75f, 1.80f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(1.0f, -0.75f, 1.80f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(1.0f, 0.75f, 1.80f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-1.0f, 0.75f, 1.80f);
+	glEnd();
+}
+
 void update()
 {
 	//Kinect
@@ -69,7 +99,8 @@ void update()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//drawColorImage();
-		draw3DScene();
+		//draw3DScene();
+		drawPlayerImage();
 
 		glutSwapBuffers();
 	}

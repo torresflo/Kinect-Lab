@@ -33,13 +33,14 @@ public:
 
 	Container::Array2D<Math::Scalar8UC3>& getColorImage();
 	Container::Array2D<Math::Scalar32FC3>& getDepthImage();
+	Container::Array2D<unsigned short>& getPlayersIndex();
 
 	static int getMinimumAngle();
 	static int getMaximumAngle();
-	int getAngle();
+	int getAngle() const;
 	void setAngle(int angle);
 
-	inline std::vector<Skeleton>& getSkeletons() { return m_Skeletons; }
+	const std::vector<Skeleton>& getSkeletons() const;
 
 private:
 	bool m_IsInitialized;

@@ -97,7 +97,12 @@ Container::Array2D<Math::Scalar32FC3>& Sensor::getDepthImage()
 	return m_DepthStream->getImage();
 }
 
-int Sensor::getAngle()
+Container::Array2D<unsigned short>& Sensor::getPlayersIndex()
+{
+	return m_DepthStream->getPlayersIndex();
+}
+
+int Sensor::getAngle() const
 {
 	long angle;
 	NuiCameraElevationGetAngle(&angle);
@@ -109,6 +114,11 @@ void Sensor::setAngle(int angle)
 {
 	angle = Math::Utils::clamp(angle, Sensor::getMinimumAngle(), Sensor::getMaximumAngle());
 	NuiCameraElevationSetAngle(angle);
+}
+
+const std::vector<Skeleton>& Sensor::getSkeletons() const
+{
+	return m_Skeletons;
 }
 
 Error Sensor::updateAllDataFromDevice()

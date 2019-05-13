@@ -52,6 +52,7 @@ class DepthStream : public AbstractStream
 {
 public:
 	Container::Array2D<Math::Scalar32FC3>& getImage();
+	Container::Array2D<unsigned short>& getPlayersIndex();
 
 protected:
 	virtual Error openStreamInternal(INuiSensor* sensor) override;
@@ -59,6 +60,7 @@ protected:
 
 private:
 	Container::Array2D<Math::Scalar32FC3> m_DepthImage; //(X, Y, Z) Float
+	Container::Array2D<unsigned short> m_PlayersIndex; //Player index from 1 to 6
 };
 
 class ColorStream : public AbstractStream
