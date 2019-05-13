@@ -47,13 +47,14 @@ You can have a look at `main.cpp` or see the example below.
 Kinect::Sensor sensor;
 Kinect::Error lastError = sensor.init(); //Init the sensor, you can precise an index if you have multiple devices connected
 
-if (lastError != Kinect::Error::NoError)
+if (lastError == Kinect::Error::NoError)
 {
     lastError = sensor.update();
     
-    //Let's retrieve images from the sensor
+    //Let's retrieve information from the sensor
     const Container::Array2D<Math::Scalar8UC3>& colorImage = sensor.getColorImage(); //2D Array of (R, G, B) values
     const Container::Array2D<Math::Scalar32FC3>& depthImage = sensor.getDepthImage(); //2D Array of depth values in millimeters
+    const Container::Array2D<unsigned short>& playersIndex = sensor.getPlayersIndex(); //2D Array of players index (from 1 to 6).
     
     //...
 }
