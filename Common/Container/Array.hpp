@@ -14,11 +14,13 @@ class Array
 {
 public:
 	Array<T, N>();
-	Array<T, N>(const ArrayDimensions<N> dimensions, T initValue = T());
+	Array<T, N>(const ArrayDimensions<N> dimensions);
+	Array<T, N>(const ArrayDimensions<N> dimensions, T initValue);
 	Array<T, N>(const Array<T, N>& copy);
 	~Array<T, N>();
 
-	void resize(const ArrayDimensions<N>& dimensions, T initValue = T());
+	void resize(const ArrayDimensions<N>& dimensions, T initValue);
+	void resize(const ArrayDimensions<N>& dimensions);
 
 	SubArray<T, N - 1> operator[] (unsigned int index);
 	const SubArray<T, N - 1> operator[] (unsigned int index) const;
@@ -35,7 +37,8 @@ private:
 	size_t m_Dimensions[N]; //Sizes of the N dimensions
 	size_t m_SubArrayLengths[N]; //Dimensions of subarrays
 
-	void allocateElements(size_t nbElements, T initValue);
+	void allocateElements(size_t nbElements);
+	void initElements(T initValue);
 	void desallocateElements();
 };
 

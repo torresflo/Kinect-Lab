@@ -19,18 +19,26 @@ inline Array<T, N>::Array()
 }
 
 template<typename T, unsigned int N>
+inline Array<T, N>::Array(const ArrayDimensions<N> dimensions)
+{
+	resize(dimensions);
+}
+
+template<typename T, unsigned int N>
 inline Array<T, N>::Array(const ArrayDimensions<N> dimensions, T initValue)
 {
 	resize(dimensions, initValue);
 }
 
 template<typename T, unsigned int N>
-inline Array<T, N>::Array(const Array<T, N> & copy)
+inline Array<T, N>::Array(const Array<T, N>& copy)
 {
+	desallocateElements();
 	m_NbElements = copy.m_NbElements;
-	std::memcpy(m_Dimensions, copy.m_Dimensions, N);
-	std::memcpy(m_SubArrayLengths, copy.m_SubArrayLengths, N);
-	std::memcpy(m_Elements, copy.m_Elements, m_NbElements);
+	std::memcpy(m_Dimensions, copy.m_Dimensions, N * sizeof(size_t));
+	std::memcpy(m_SubArrayLengths, copy.m_SubArrayLengths, N * sizeof(size_t));
+	allocateElements(m_NbElements);
+	std::memcpy(m_Elements, copy.m_Elements, m_NbElements * sizeof(T));
 }
 
 template<typename T, unsigned int N>
@@ -42,11 +50,18 @@ inline Array<T, N>::~Array()
 template<typename T, unsigned int N>
 inline void Array<T, N>::resize(const ArrayDimensions<N>& dimensions, T initValue)
 {
+	resize(dimensions);
+	initElements(initValue);
+}
+
+template<typename T, unsigned int N>
+inline void Array<T, N>::resize(const ArrayDimensions<N>& dimensions)
+{
 	desallocateElements();
 
 	//Calculate all the information you need to use the array
 	m_NbElements = 1;
-	for (unsigned int i = 0; i<N; ++i)
+	for (unsigned int i = 0; i < N; ++i)
 	{
 		assert(dimensions[i] != 0);
 
@@ -59,7 +74,7 @@ inline void Array<T, N>::resize(const ArrayDimensions<N>& dimensions, T initValu
 		}
 	}
 
-	allocateElements(m_NbElements, initValue);
+	allocateElements(m_NbElements);
 }
 
 template<typename T, unsigned int N>
@@ -102,10 +117,14 @@ inline size_t Array<T, N>::getDimension(unsigned int index) const
 }
 
 template<typename T, unsigned int N>
-inline void Array<T, N>::allocateElements(size_t nbElements, T initValue)
+inline void Array<T, N>::allocateElements(size_t nbElements)
 {
 	m_Elements = new T[m_NbElements];
+}
 
+template<typename T, unsigned int N>
+inline void Array<T, N>::initElements(T initValue)
+{
 	for (unsigned int i = 0; i < m_NbElements; ++i)
 	{
 		m_Elements[i] = initValue;
