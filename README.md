@@ -56,6 +56,13 @@ if (lastError == Kinect::Error::NoError)
     const Container::Array2D<Math::Scalar32FC3>& depthImage = sensor.getDepthImage(); //2D Array of depth values in millimeters
     const Container::Array2D<unsigned short>& playersIndex = sensor.getPlayersIndex(); //2D Array of players index (from 1 to 6).
     
+    std::vector<Kinect::Skeleton> skeletons = sensor.getSkeletons(); //Vector of available skeletons
+    for(const Kinect::Skeleton& skeleton : skeletons)
+    {
+        const Math::Vector3f& headPosition = skeleton.getPosition(Kinect::SkeletonPosition::Head);
+        const Math::Vector3f& handLeftPosition = skeleton.getPosition(Kinect::SkeletonPosition::HandLeft);
+        //...
+    }
     //...
 }
 ```
