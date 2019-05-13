@@ -86,6 +86,88 @@ void drawPlayerImage()
 	glEnd();
 }
 
+void pushVertex3f(const Math::Vector3f& vertex)
+{
+	glVertex3f(vertex.x(), vertex.y(), vertex.z());
+}
+
+void drawSkeletons()
+{
+	std::vector<Kinect::Skeleton> skeletons = sensor.getSkeletons();
+	for (unsigned int i = 0; i < skeletons.size(); ++i)
+	{
+		Kinect::Skeleton skeleton = skeletons.at(i);
+
+		glBegin(GL_LINES);
+		glLineWidth(5.0f);
+		glColor3f(1.f, 1.f, 1.f);
+
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::Head));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::ShoulderCenter));
+
+		//Left arm
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::ShoulderCenter));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::ShoulderLeft));
+
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::ShoulderLeft));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::ElbowLeft));
+
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::ElbowLeft));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::WristLeft));
+		
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::WristLeft));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::HandLeft));
+
+		//Right arm
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::ShoulderCenter));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::ShoulderRight));
+
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::ShoulderRight));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::ElbowRight));
+
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::ElbowRight));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::WristRight));
+
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::WristRight));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::HandRight));
+
+		//Body
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::ShoulderCenter));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::Spine));
+
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::Spine));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::HipCenter));
+
+		//Left leg
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::HipCenter));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::HipLeft));
+
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::HipLeft));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::KneeLeft));
+
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::KneeLeft));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::AnkleLeft));
+
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::AnkleLeft));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::FootLeft));
+
+		//Right leg
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::HipCenter));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::HipRight));
+
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::HipRight));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::KneeRight));
+
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::KneeRight));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::AnkleRight));
+
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::AnkleRight));
+		pushVertex3f(skeleton.getPosition(Kinect::SkeletonPosition::FootRight));
+
+		glEnd();
+	}
+}
+
 void update()
 {
 	//Kinect
@@ -100,7 +182,8 @@ void update()
 
 		//drawColorImage();
 		//draw3DScene();
-		drawPlayerImage();
+		//drawPlayerImage();
+		drawSkeletons();
 
 		glutSwapBuffers();
 	}

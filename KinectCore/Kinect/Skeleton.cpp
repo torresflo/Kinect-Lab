@@ -7,17 +7,18 @@
 namespace Kinect
 {
 
+unsigned int Skeleton::getMaxSkeletonCount()
+{
+	return NUI_SKELETON_COUNT;
+}
 unsigned int Skeleton::getPositionsCount()
 {
-	return 20;
+	return Skeleton::POSITIONS_COUNT;
 }
 
 Skeleton::Skeleton()
 {
-	m_Positions.resize(getPositionsCount());
 	std::fill(m_Positions.begin(), m_Positions.end(), Math::Vector3f());
-
-	m_TrackingStatus.resize(getPositionsCount());
 	std::fill(m_TrackingStatus.begin(), m_TrackingStatus.end(), TrackingStatus::NotTracked);
 }
 
@@ -26,19 +27,37 @@ Skeleton::~Skeleton()
 
 void Skeleton::update(const NUI_SKELETON_DATA& skeletonData)
 {
+	m_ClippingStatus = static_cast<ClippingFlags>(skeletonData.dwQualityFlags);
+	m_playerEnrollmentIndex = skeletonData.dwEnrollmentIndex;
+
 	for (unsigned int i = 0; i < getPositionsCount(); ++i)
 	{
 		Vector4 position = skeletonData.SkeletonPositions[i];
 		if (skeletonData.eSkeletonPositionTrackingState[i] == NUI_SKELETON_POSITION_TRACKING_STATE::NUI_SKELETON_POSITION_NOT_TRACKED)
 		{
-			m_Positions.at(i) = Math::Vector3f();
+			m_Positions[i] = Math::Vector3f();
 		}
 		else
 		{
-			m_Positions.at(i) = Math::Vector3f(position.x, position.y, position.z) / position.w;
+			m_Positions[i] = Math::Vector3f(position.x, position.y, position.z);
 		}
-		m_TrackingStatus.at(i) = convertNuiToTrackingStatus(skeletonData.eSkeletonPositionTrackingState[i]);
+		m_TrackingStatus[i] = convertNuiToTrackingStatus(skeletonData.eSkeletonPositionTrackingState[i]);
 	}
+}
+
+ClippingFlags Skeleton::getClippingFlags() const
+{
+	return m_ClippingStatus;
+}
+
+bool Skeleton::isClipped() const
+{
+	return m_ClippingStatus != ClippingFlags::NotClipped;
+}
+
+unsigned int Skeleton::getPlayerEnrollmentIndex() const
+{
+	return m_playerEnrollmentIndex;
 }
 
 const Math::Vector3f& Skeleton::getPosition(SkeletonPosition position)

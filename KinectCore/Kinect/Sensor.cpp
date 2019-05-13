@@ -129,9 +129,40 @@ Error Sensor::updateAllDataFromDevice()
 	if (error == Error::NoError)
 	{
 		error = m_ColorStream->updateStream(m_Sensor);
+		if (error == Error::NoError)
+		{
+			error = updateSkeletonsFromDevice();
+		}
 	}
 
 	return error;
+}
+
+Error Sensor::updateSkeletonsFromDevice()
+{
+	NUI_SKELETON_FRAME skeletonFrame;
+	HRESULT result = m_Sensor->NuiSkeletonGetNextFrame(0, &skeletonFrame);
+	if (result == S_OK)
+	{
+		unsigned int trackedSkeletonCount = 0;
+		m_Sensor->NuiTransformSmooth(&skeletonFrame, NULL);
+		for (int i = 0; i < NUI_SKELETON_COUNT; ++i)
+		{
+			const NUI_SKELETON_DATA& skeletonData = skeletonFrame.SkeletonData[i];
+			if (skeletonData.eTrackingState == NUI_SKELETON_TRACKED)
+			{
+				if (trackedSkeletonCount >= m_Skeletons.size())
+				{
+					m_Skeletons.emplace_back();
+				}
+				m_Skeletons.at(trackedSkeletonCount).update(skeletonData);
+				trackedSkeletonCount++;
+			}
+		}
+
+		m_Skeletons.resize(trackedSkeletonCount);
+	}
+	return convertNuiToKinectError(result);
 }
 
 }

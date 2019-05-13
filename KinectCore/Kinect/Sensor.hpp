@@ -54,6 +54,7 @@ private:
 	std::vector<Skeleton> m_Skeletons;
 
 	Error updateAllDataFromDevice();
+	Error updateSkeletonsFromDevice();
 };
 
 }
